@@ -1,5 +1,5 @@
 # Bastion accepting connections from Internet
-resource " aws_security_group_rule" "bastion_internet"{  
+resource "aws_security_group_rule" "bastion_internet"{  
     type = "ingress"
     from_port = 22
     to_port = 22
@@ -8,7 +8,7 @@ resource " aws_security_group_rule" "bastion_internet"{
     security_group_id = local.bastion_sg_id
 }
 
-resource " aws_security_group_rule" "mongodb_bastion"{
+resource "aws_security_group_rule" "mongodb_bastion"{
     type = "ingress"
     from_port = 22
     to_port = 22
@@ -17,7 +17,7 @@ resource " aws_security_group_rule" "mongodb_bastion"{
     security_group_id = local.mongodb_sg_id
 }
 
-resource " aws_security_group_rule" "mongodb_catalogue"{
+resource "aws_security_group_rule" "mongodb_catalogue"{
     type = "ingress"
     from_port = 27017
     to_port = 27017
@@ -26,7 +26,7 @@ resource " aws_security_group_rule" "mongodb_catalogue"{
     security_group_id = local.mongodb_sg_id
 }
 
-resource " aws_security_group_rule" "mongodb_user"{
+resource "aws_security_group_rule" "mongodb_user"{
     type = "ingress"
     from_port = 27017
     to_port = 27017
