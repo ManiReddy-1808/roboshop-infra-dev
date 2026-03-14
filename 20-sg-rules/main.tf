@@ -47,3 +47,25 @@ resource "aws_security_group_rule" "redis_bastion"{
     source_security_group_id = local.bastion_sg_id # Where traffic is coming from
     security_group_id = local.redis_sg_id
 }
+
+
+# Mysql accepting connections form Bastion
+resource "aws_security_group_rule" "mysql_bastion"{
+    type = "ingress"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    source_security_group_id = local.bastion_sg_id # Where traffic is coming from
+    security_group_id = local.mysql_sg_id
+}
+
+
+# RabbitMQ accepting connections form Bastion
+resource "aws_security_group_rule" "rabbit_bastion"{
+    type = "ingress"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    source_security_group_id = local.bastion_sg_id # Where traffic is coming from
+    security_group_id = local.rabbitmq_sg_id
+}

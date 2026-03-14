@@ -6,10 +6,12 @@ output "my_ipv4_address" {   # Use chomp() to remove any trailing newline charac
   value = chomp(data.http.my_public_ipv4.response_body)
 }
 
+# BASTION
 data "aws_ssm_parameter" "bastion_sg_id" {
   name = "/${var.project}/${var.environment}/bastion_sg_id"
 }
 
+# DATABASES
 data "aws_ssm_parameter" "mongodb_sg_id" {
   name = "/${var.project}/${var.environment}/mongodb_sg_id"
 }
@@ -26,10 +28,28 @@ data "aws_ssm_parameter" "rabbitmq_sg_id" {
   name = "/${var.project}/${var.environment}/rabbitmq_sg_id"
 }
 
+# BACKEND
 data "aws_ssm_parameter" "catalogue_sg_id" {
   name = "/${var.project}/${var.environment}/catalogue_sg_id"
 }
 
 data "aws_ssm_parameter" "user_sg_id" {
   name = "/${var.project}/${var.environment}/user_sg_id"
+}
+
+data "aws_ssm_parameter" "cart_sg_id" {
+  name = "/${var.project}/${var.environment}/cart_sg_id"
+}
+
+data "aws_ssm_parameter" "shipping_sg_id" {
+  name = "/${var.project}/${var.environment}/shipping_sg_id"
+}
+
+data "aws_ssm_parameter" "payment_sg_id" {
+  name = "/${var.project}/${var.environment}/payment_sg_id"
+}
+
+#Frontend
+data "aws_ssm_parameter" "frontend_sg_id" {
+  name = "/${var.project}/${var.environment}/frontend_sg_id"
 }
