@@ -5,7 +5,6 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids = [local.bastion_sg_id] # List ? because it accepts multiple SGs
   iam_instance_profile = aws_iam_instance_profile.bastion.name
 
-
   tags = merge(
     {
         Name = "${var.project}-${var.environment}-bastion"
@@ -43,7 +42,7 @@ resource "aws_iam_role" "bastion" {
 
 resource "aws_iam_role_policy_attachment" "bastion" {
   role       = aws_iam_role.bastion.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess" # Generally don't give Admin Access
 }
 
 # Use of instance profile is required to attach IAM role to EC2 instance.
@@ -52,3 +51,5 @@ resource "aws_iam_instance_profile" "bastion" {
   name = "${var.project}-${var.environment}-bastion"
   role = aws_iam_role.bastion.name
 }
+
+# mongodb-dev.dawsmani.site
