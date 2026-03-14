@@ -12,7 +12,7 @@ resource "aws_instance" "mongodb" {
   )
 }
 
-resource "terraform_data" "bootstrap" { # Use: terraform_data to execute commands on remote server after provisioning
+resource "terraform_data" "mongodb" { # Use: terraform_data to execute commands on remote server after provisioning
   triggers_replace = [
     aws_instance.mongodb.id
   ]
