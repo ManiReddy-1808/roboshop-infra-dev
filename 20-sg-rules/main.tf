@@ -8,6 +8,8 @@ resource "aws_security_group_rule" "bastion_internet"{
     security_group_id = local.bastion_sg_id
 }
 
+
+# MongoDB accepting connections form Bastion
 resource "aws_security_group_rule" "mongodb_bastion"{
     type = "ingress"
     from_port = 22
@@ -33,4 +35,15 @@ resource "aws_security_group_rule" "mongodb_user"{
     protocol = "tcp"
     source_security_group_id = local.user_sg_id 
     security_group_id = local.mongodb_sg_id
+}
+
+
+# Redis accepting connections form Bastion
+resource "aws_security_group_rule" "redis_bastion"{
+    type = "ingress"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    source_security_group_id = local.bastion_sg_id # Where traffic is coming from
+    security_group_id = local.redis_sg_id
 }
