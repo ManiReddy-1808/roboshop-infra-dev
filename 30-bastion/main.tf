@@ -4,7 +4,7 @@ resource "aws_instance" "bastion" {
   subnet_id = local.public_subnet_id
   vpc_security_group_ids = [local.bastion_sg_id] # List ? because it accepts multiple SGs
   iam_instance_profile = aws_iam_instance_profile.bastion.name
-  # user_data = file(bastion.sh) # To execute commands on the instance during provisioning, we can use user_data. It accepts a string, so we can use file() function to read the content of the file and pass it as a string.
+  user_data = file("bastion.sh") # To execute commands on the instance during provisioning, we can use user_data. It accepts a string, so we can use file() function to read the content of the file and pass it as a string.
 
   root_block_device {
     volume_size = 50
