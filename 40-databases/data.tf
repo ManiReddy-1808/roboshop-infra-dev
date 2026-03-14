@@ -19,7 +19,7 @@ data "aws_ami" "joindevops" { #to get the information from provider, we can use 
 }
 
 data "aws_ssm_parameter" "database_subnet_ids"{
-    name = "/${var.project}/${var.environment}/public_subnet_ids" # 2 subnet's we created
+    name = "/${var.project}/${var.environment}/private_subnet_ids" # Database should be in private subnets
 }
 
 data "aws_ssm_parameter" "mongodb_sg_id"{
