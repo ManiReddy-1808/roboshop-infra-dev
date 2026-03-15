@@ -1,5 +1,5 @@
-#We are using aws_alb resource because we want to use ALB specific features like path-based routing, host-based routing, etc.
-resource "aws_alb" "backend_alb" { 
+# Using aws_lb instead of aws_alb because aws_alb is deprecated. ALB is a type of LB. So we can use aws_lb resource to create ALB.
+resource "aws_lb" "backend_alb" { 
   name = "${var.project}-${var.environment}"
   internal = true
   load_balancer_type = "application"
