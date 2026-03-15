@@ -69,3 +69,13 @@ resource "aws_security_group_rule" "rabbit_bastion"{
     source_security_group_id = local.bastion_sg_id # Where traffic is coming from
     security_group_id = local.rabbitmq_sg_id
 }
+
+# BackendALB accepting connections form Bastion
+resource "aws_security_group_rule" "backend_alb_bastion"{
+    type = "ingress"
+    from_port = 80 # 22 will not give access to backend ALB by AWS.
+    to_port = 80 
+    protocol = "tcp"
+    source_security_group_id = local.bastion_sg_id # Where traffic is coming from
+    security_group_id = local.backend_alb_sg_id
+}
