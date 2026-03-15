@@ -3,7 +3,7 @@
 
 # Instance Profile will crete then attach to MySQL Instance
 
-resource "aws_iam_role" "mysql" {
+resource "aws_iam_role" "mysql" { # Use: to create IAM Role
   name = local.mysql_role_name #Roboshop-Dev-Mysql
 
   # Terraform's "jsonencode" function converts a
@@ -30,20 +30,20 @@ resource "aws_iam_role" "mysql" {
   )
 }
 
-resource "aws_iam_policy" "mysql" {
+resource "aws_iam_policy" "mysql" { # Use: to create IAM Policy
   name        = local.mysql_policy_name
   description = "A policy for MySQL Ec2 instance"
-  policy      = templatefile("mysql-iam-policy.json", {
+  policy      = templatefile("mysql-iam-policy.json", { 
                 environment = var.environment
-  })
+  }) # templatefile() func is used to read the content of the file and replace the variables with actual values
 }
 
-resource "aws_iam_role_policy_attachment" "mysql" {
+resource "aws_iam_role_policy_attachment" "mysql" { # Use: to attach IAM Policy to IAM Role
   role       = aws_iam_role.mysql.name
   policy_arn = aws_iam_policy.mysql.arn
 }
 
-resource "aws_iam_instance_profile" "mysql" {
+resource "aws_iam_instance_profile" "mysql" { # Use: to attach IAM Role to EC2 Instance
   name = "${var.project}-${var.environment}-mysql"
   role = aws_iam_role.mysql.name
 }

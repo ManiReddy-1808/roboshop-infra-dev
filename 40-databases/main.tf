@@ -32,7 +32,7 @@ resource "terraform_data" "mongodb" { # Use: terraform_data to execute commands 
   provisioner "remote-exec" {
     inline = [ 
         "chmod +x /tmp/bootstrap.sh",
-        "sudo sh /tmp/bootstrap.sh mongodb"
+        "sudo sh /tmp/bootstrap.sh mongodb ${var.environment}"
      ]
   }
 }
@@ -71,7 +71,7 @@ resource "terraform_data" "redis" { # Use: terraform_data to execute commands on
   provisioner "remote-exec" {
     inline = [ 
         "chmod +x /tmp/bootstrap.sh",
-        "sudo sh /tmp/bootstrap.sh redis"
+        "sudo sh /tmp/bootstrap.sh redis ${var.environment}"
      ]
   }
 }
@@ -83,6 +83,7 @@ resource "aws_instance" "mysql" {
   instance_type = "t3.micro"
   subnet_id = local.database_subnet_id
   vpc_security_group_ids = [local.mysql_sg_id] # List ? because it accepts multiple SGs
+  iam_instance_profile = aws_iam_instance_profile.mysql.name # Attach IAM Role to EC2 Instance
 
   tags = merge(
     {
@@ -111,7 +112,7 @@ resource "terraform_data" "mysql" { # Use: terraform_data to execute commands on
   provisioner "remote-exec" {
     inline = [ 
         "chmod +x /tmp/bootstrap.sh",
-        "sudo sh /tmp/bootstrap.sh mysql"
+        "sudo sh /tmp/bootstrap.sh mysql ${var.environment}"
      ]
   }
 }
@@ -151,7 +152,7 @@ resource "terraform_data" "rabbitmq" { # Use: terraform_data to execute commands
   provisioner "remote-exec" {
     inline = [ 
         "chmod +x /tmp/bootstrap.sh",
-        "sudo sh /tmp/bootstrap.sh rabbitmq"
+        "sudo sh /tmp/bootstrap.sh rabbitmq ${var.environment}"
      ]
   }
 }
