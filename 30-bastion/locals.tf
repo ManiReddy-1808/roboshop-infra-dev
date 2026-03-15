@@ -3,7 +3,6 @@ locals {
   common_tags = {
     Project     = var.project
     Environment = var.environment
-    Name        = "bastion"
  }
   # Convert string to List and access 0th element in 1a AZ
   public_subnet_id = split(",", data.aws_ssm_parameter.public_subnet_ids.value)[0]
