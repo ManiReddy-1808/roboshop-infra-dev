@@ -36,3 +36,22 @@ resource "terraform_data" "catalogue" {
     ]
   }
 }
+
+resource "aws_ec2_instance_state" "catalogue" { # After terraform_data provisioned then only we can stop the instance, so we have to use depends_on to create dependency between them.
+  instance_id = aws_instance.catalogue.id
+  state       = "stopped"
+  depends_on = [terraform_data.catalogue]
+}
+
+resource "aws_ami_from_instance" "catalogue" { # After instance stopped then only we can create AMI from that instance, so we have to use depends_on to create dependency between them.
+  # roboshop-dev-catalogue-v3-i-h468sghy
+  name               = "${var.project}-${var.environment}-catalogue-${var.app_version}-${aws_instance.catalogue.id}"
+  source_instance_id = aws_instance.catalogue.id
+  depends_on = [aws_ec2_instance_state.catalogue]
+  tags = merge(
+    {
+        Name = "${var.project}-${var.environment}-catalogue"
+    },
+    local.common_tags
+  )
+}
