@@ -146,11 +146,11 @@ resource "aws_autoscaling_group" "catalogue" {
     preferences {
       min_healthy_percentage = 50
     }
-    triggers = ["launch_template"]
+    triggers = ["launch_template"] # Old instances will deleted and new instances will be created when launch template is updated.
   }
 
   dynamic "tag" {
-    for_each = merge(
+    for_each = merge( # Acceptes set/ map
         {
             Name = "${var.project}-${var.environment}-catalogue"
         },
@@ -172,7 +172,7 @@ resource "aws_autoscaling_group" "catalogue" {
 resource "aws_autoscaling_policy" "catalogue" {
   autoscaling_group_name = aws_autoscaling_group.catalogue.name
   name                   = "${var.project}-${var.environment}-catalogue"
-  policy_type            = "TargetTrackingScaling"
+  policy_type            = "TargetTrackingScaling" # Track the instances in Autoscaling Group.
   estimated_instance_warmup = 120
 
   target_tracking_configuration {
@@ -180,7 +180,7 @@ resource "aws_autoscaling_policy" "catalogue" {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
 
-    target_value = 70.0
+    target_value = 70.0 # If more than 70%  then create new EC2 Instances.
   }
 }
 
@@ -207,8 +207,11 @@ resource "terraform_data" "catalogue_delete" {
   ]
   depends_on = [aws_autoscaling_policy.catalogue]
   
-  # it executes in bastion
+  # Tt executes in bastion.
   provisioner "local-exec" {
     command = "aws ec2 terminate-instances --instance-ids ${aws_instance.catalogue.id} "
-  }
+  } 
+  # We do not have terraform terminate resource, so we have to use local-exec provisioner to terminate the instance. 
+  # We have to use depends_on to create dependency between them because we have to terminate the instance after creating autoscaling policy,
+  # otherwise if we terminate the instance before creating autoscaling policy then autoscaling will not work because there is no instance in autoscaling group.
 }
