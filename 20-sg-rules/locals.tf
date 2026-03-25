@@ -17,4 +17,6 @@ locals {
   # FRONTEND
   frontend_sg_id = data.aws_ssm_parameter.frontend_sg_id.value
   frontend_alb_sg_id = data.aws_ssm_parameter.frontend_alb_sg_id.value
+  # Openvpn
+  openvpn_sg_id = data.aws_ssm_parameter.openvpn_sg_id.value
 }
