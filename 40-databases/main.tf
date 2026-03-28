@@ -1,9 +1,8 @@
-# MONGODB =========
 resource "aws_instance" "mongodb" {
   ami           = local.ami_id
   instance_type = "t3.micro"
   subnet_id = local.database_subnet_id
-  vpc_security_group_ids = [local.mongodb_sg_id] # List ? because it accepts multiple SGs
+  vpc_security_group_ids = [local.mongodb_sg_id]
 
   tags = merge(
     {
@@ -13,36 +12,36 @@ resource "aws_instance" "mongodb" {
   )
 }
 
-resource "terraform_data" "mongodb" { # Use: terraform_data to execute commands on remote server after provisioning
+resource "terraform_data" "mongodb" {
   triggers_replace = [
     aws_instance.mongodb.id
   ]
+
   connection {
-    type = "ssh"
-    user = "ec2-user"
+    type     = "ssh"
+    user     = "ec2-user"
     password = "DevOps321"
-    host = aws_instance.mongodb.private_ip
+    host     = aws_instance.mongodb.private_ip
   }
-  
+
   provisioner "file" {
-    source = "bootstrap.sh" # Local file path
-    destination = "/tmp/bootstrap.sh" #Dest path on the remote machine
+    source      = "bootstrap.sh" # Local file path
+    destination = "/tmp/bootstrap.sh"    # Destination path on the remote machine
   }
 
   provisioner "remote-exec" {
-    inline = [ 
+    inline = [
         "chmod +x /tmp/bootstrap.sh",
         "sudo sh /tmp/bootstrap.sh mongodb ${var.environment}"
-     ]
+    ]
   }
 }
 
-# REDIS ===========
 resource "aws_instance" "redis" {
   ami           = local.ami_id
   instance_type = "t3.micro"
   subnet_id = local.database_subnet_id
-  vpc_security_group_ids = [local.redis_sg_id] # List ? because it accepts multiple SGs
+  vpc_security_group_ids = [local.redis_sg_id]
 
   tags = merge(
     {
@@ -52,38 +51,37 @@ resource "aws_instance" "redis" {
   )
 }
 
-resource "terraform_data" "redis" { # Use: terraform_data to execute commands on remote server after provisioning
+resource "terraform_data" "bootstrap_redis" {
   triggers_replace = [
     aws_instance.redis.id
   ]
+
   connection {
-    type = "ssh"
-    user = "ec2-user"
+    type     = "ssh"
+    user     = "ec2-user"
     password = "DevOps321"
-    host = aws_instance.redis.private_ip
+    host     = aws_instance.redis.private_ip
   }
-  
+
   provisioner "file" {
-    source = "bootstrap.sh" # Local file path
-    destination = "/tmp/bootstrap.sh" #Dest path on the remote machine
+    source      = "bootstrap.sh" # Local file path
+    destination = "/tmp/bootstrap.sh"    # Destination path on the remote machine
   }
 
   provisioner "remote-exec" {
-    inline = [ 
+    inline = [
         "chmod +x /tmp/bootstrap.sh",
         "sudo sh /tmp/bootstrap.sh redis ${var.environment}"
-     ]
+    ]
   }
 }
 
-
-# MYSQL ===========
 resource "aws_instance" "mysql" {
   ami           = local.ami_id
   instance_type = "t3.micro"
   subnet_id = local.database_subnet_id
-  vpc_security_group_ids = [local.mysql_sg_id] # List ? because it accepts multiple SGs
-  iam_instance_profile = aws_iam_instance_profile.mysql.name # Attach IAM Role to EC2 Instance
+  vpc_security_group_ids = [local.mysql_sg_id]
+  iam_instance_profile = aws_iam_instance_profile.mysql.name
 
   tags = merge(
     {
@@ -93,37 +91,36 @@ resource "aws_instance" "mysql" {
   )
 }
 
-resource "terraform_data" "mysql" { # Use: terraform_data to execute commands on remote server after provisioning
+resource "terraform_data" "mysql" {
   triggers_replace = [
     aws_instance.mysql.id
   ]
+
   connection {
-    type = "ssh"
-    user = "ec2-user"
+    type     = "ssh"
+    user     = "ec2-user"
     password = "DevOps321"
-    host = aws_instance.mysql.private_ip
+    host     = aws_instance.mysql.private_ip
   }
-  
+
   provisioner "file" {
-    source = "bootstrap.sh" # Local file path
-    destination = "/tmp/bootstrap.sh" #Dest path on the remote machine
+    source      = "bootstrap.sh" # Local file path
+    destination = "/tmp/bootstrap.sh"    # Destination path on the remote machine
   }
 
   provisioner "remote-exec" {
-    inline = [ 
+    inline = [
         "chmod +x /tmp/bootstrap.sh",
         "sudo sh /tmp/bootstrap.sh mysql ${var.environment}"
-     ]
+    ]
   }
 }
 
-
-# RABBITMQ ===========
 resource "aws_instance" "rabbitmq" {
   ami           = local.ami_id
   instance_type = "t3.micro"
   subnet_id = local.database_subnet_id
-  vpc_security_group_ids = [local.rabbitmq_sg_id] # List ? because it accepts multiple SGs
+  vpc_security_group_ids = [local.rabbitmq_sg_id]
 
   tags = merge(
     {
@@ -133,26 +130,27 @@ resource "aws_instance" "rabbitmq" {
   )
 }
 
-resource "terraform_data" "rabbitmq" { # Use: terraform_data to execute commands on remote server after provisioning
+resource "terraform_data" "rabbitmq" {
   triggers_replace = [
     aws_instance.rabbitmq.id
   ]
+
   connection {
-    type = "ssh"
-    user = "ec2-user"
+    type     = "ssh"
+    user     = "ec2-user"
     password = "DevOps321"
-    host = aws_instance.rabbitmq.private_ip
+    host     = aws_instance.rabbitmq.private_ip
   }
-  
+
   provisioner "file" {
-    source = "bootstrap.sh" # Local file path
-    destination = "/tmp/bootstrap.sh" #Dest path on the remote machine
+    source      = "bootstrap.sh" # Local file path
+    destination = "/tmp/bootstrap.sh"    # Destination path on the remote machine
   }
 
   provisioner "remote-exec" {
-    inline = [ 
+    inline = [
         "chmod +x /tmp/bootstrap.sh",
         "sudo sh /tmp/bootstrap.sh rabbitmq ${var.environment}"
-     ]
+    ]
   }
 }
